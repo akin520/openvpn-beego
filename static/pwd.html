@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>随机密码</title>
+<SCRIPT LANGUAGE="JavaScript">
+<!-- Begin
+function getRandomNum(lbound, ubound)
+{
+return (Math.floor(Math.random() * (ubound - lbound)) + lbound);
+}
+function getRandomChar(number, lower, upper, other, extra)
+{
+var numberChars = "0123456789";
+var lowerChars = "abcdefghijklmnopqrstuvwxyz";
+var upperChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+var otherChars = "`~!@#$%^&*()-_=+[{]}\\|;:',<.>/?";
+var charSet = extra;
+if (number == true)
+charSet += numberChars;
+if (lower == true)
+charSet += lowerChars;
+if (upper == true)
+charSet += upperChars;
+if (other == true)
+charSet += otherChars;
+return charSet.charAt(getRandomNum(0, charSet.length));
+}
+function getPassword(length, extraChars, firstNumber, firstLower, firstUpper, firstOther,
+latterNumber, latterLower, latterUpper, latterOther)
+{
+var rc = "";
+if (length > 0)
+rc = rc + getRandomChar(firstNumber, firstLower, firstUpper, firstOther, extraChars);
+for (var idx = 1; idx < length; ++idx)
+{
+rc = rc + getRandomChar(latterNumber, latterLower, latterUpper, latterOther, extraChars);
+}
+return rc;
+}
+// End -->
+</script>
+</head>
+<body>
+<center>
+<table width=80% border=0>
+<tr align=center><td><form name="myform"><table border=0>
+<tr><td>密码前几位包括:</td><td>
+<input type=checkbox name=firstNumber checked>数字
+<input type=checkbox name=firstLower checked>小写字母
+<input type=checkbox name=firstUpper checked>大写字母
+<input type=checkbox name=firstOther>其它
+</td></tr>
+<tr><td>密码后几位包括:</td><td>
+<input type=checkbox name=latterNumber checked>数字
+<input type=checkbox name=latterLower checked>小写字母
+<input type=checkbox name=latterUpper checked>大写字母
+<input type=checkbox name=latterOther>其它
+</td></tr>
+<tr><td>密码长度:</td><td>
+<input type=text name=passwordLength value="24" size=6>
+</td></tr>
+<tr><td>自定密码特征:</td><td>
+<input type=text name=extraChars value="fh21" size=33>
+</td></tr>
+</table>
+<tr align=center><td>密码:<input type=text name=password size=46>
+<br><br>
+<input type=button value="产生密码" onClick="document.myform.password.value = getPassword(document.myform.passwordLength.value,document.myform.extraChars.value, document.myform.firstNumber.checked,document.myform.firstLower.checked,document.myform.firstUpper.checked, document.myform.firstOther.checked,document.myform.latterNumber.checked, document.myform.latterLower.checked,document.myform.latterUpper.checked, document.myform.latterOther.checked);"/>
+</form>
+</td>
+</tr>
+</table>
+<br />
+<br />
+<br />
+</center>
+</body>
+</html>
