@@ -12,4 +12,5 @@ func init() {
 	beego.Router("/user", &controllers.UserController{})
 	beego.AutoRouter(&controllers.UserController{})
 	beego.Router("/del/:id", &controllers.UserdelController{})
+	beego.Router("/addtime/:id", &controllers.AddtimeController{})
 }

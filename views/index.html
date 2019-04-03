@@ -34,6 +34,14 @@ function p_del() {
 	return false; 
 	} 
 }
+function addtime() { 
+  var msg = "您真的确定吗？\n\n请确认！"; 
+  if (confirm(msg)==true){ 
+  return true; 
+  }else{ 
+  return false; 
+  } 
+}
 </SCRIPT> 
 
 
@@ -110,7 +118,7 @@ function p_del() {
 					            <td>{{ .Name }}</td>
 					            <td>{{ .Password }}</td>
                       <td>{{ .Expired_time }}</td>
-					            <td><a href="/user/modify?uid={{.Id}}" onclick="">修改</a> <a href="/del/{{ .Id }}" onclick="javascript:return p_del()">删除</a></td>
+					            <td><a href="/user/modify?uid={{.Id}}" onclick="">修改</a> <a href="/addtime/{{.Id }}">续期</a> <a href="/del/{{ .Id }}" onclick="javascript:return p_del()">删除</a></td>
 					          </tr>
 					       </tbody>
                  {{ end }}

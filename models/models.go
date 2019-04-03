@@ -117,6 +117,28 @@ func ModifyUser(uid string, name string, password string) error {
 	return nil
 }
 
+func AddTime(id string) error {
+	cid, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		return err
+	}
+	year, _ := Cfg.Int("expired_year")
+	month, _ := Cfg.Int("expired_month")
+	day, _ := Cfg.Int("expired_day")
+	//beego.Debug(year, month, day)
+	o := orm.NewOrm()
+	u := &User{Id: cid}
+	if o.Read(u) == nil {
+		u.Expired_time = time.Now().AddDate(year, month, day)
+		u.Active = 1
+		_, err = o.Update(u)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func DelUser(id string) error {
 	cid, err := strconv.ParseInt(id, 10, 64)
 	if err != nil {
