@@ -6,14 +6,18 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"fmt"
+	"strconv"
+	"time"
+
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
-	"strconv"
-	"time"
+	openvpnStatus "github.com/shrikantpatnaik/go-openvpn-status"
 )
 
 var Cfg = beego.AppConfig
+
+//var Client *openvpnStatus.Client
 
 type User struct {
 	Id           int64
@@ -130,6 +134,7 @@ func AddTime(id string) error {
 	u := &User{Id: cid}
 	if o.Read(u) == nil {
 		u.Expired_time = time.Now().AddDate(year, month, day)
+		// u.Expired_time = u.Expired_time.AddDate(year, month, day)
 		u.Active = 1
 		_, err = o.Update(u)
 		if err != nil {
@@ -148,6 +153,26 @@ func DelUser(id string) error {
 	u := &User{Id: cid}
 	_, err = o.Delete(u)
 	return err
+}
+
+func UpdateAllUser() error {
+	o := orm.NewOrm()
+	year, _ := Cfg.Int("expired_year")
+	month, _ := Cfg.Int("expired_month")
+	day, _ := Cfg.Int("expired_day")
+	gt_uid, _ := Cfg.Int("gt_uid")
+	upday := time.Now().AddDate(year, month, day)
+	beego.Debug(year, month, day, upday, gt_uid)
+	qs := o.QueryTable("user")
+	n, err := qs.Filter("id__gt", gt_uid).Filter("active", 1).Update(orm.Params{
+		"Expired_time": upday,
+		"Active":       1,
+	})
+	if err == nil && n > 0 {
+		return nil
+	} else {
+		return err
+	}
 }
 
 func GetUser(uid string) (*User, error) {
@@ -180,4 +205,12 @@ func GetLogsAll() ([]*Login_log, error) {
 	//https://github.com/joiggama/beego-example/blob/master/Godeps/_workspace/src/github.com/astaxie/beego/orm/docs/zh/Query.md
 	_, err := qs.OrderBy("-id").Limit(10).All(&logs)
 	return logs, err
+}
+
+func GetOnline() ([]openvpnStatus.Client, error) {
+	log_path := Cfg.String("log_path")
+	beego.Debug(log_path)
+	status, err := openvpnStatus.ParseFile(log_path)
+	client := status.ClientList
+	return client, err
 }

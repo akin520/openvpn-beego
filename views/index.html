@@ -34,13 +34,13 @@ function p_del() {
 	return false; 
 	} 
 }
-function addtime() { 
-  var msg = "您真的确定吗？\n\n请确认！"; 
-  if (confirm(msg)==true){ 
-  return true; 
-  }else{ 
-  return false; 
-  } 
+function p_update() { 
+	var msg = "您真的确定要续期吗？\n\n请确认！"; 
+	if (confirm(msg)==true){ 
+	return true; 
+	}else{ 
+	return false; 
+	} 
 }
 </SCRIPT> 
 
@@ -76,6 +76,7 @@ function addtime() {
         <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
           <div class="list-group">
             <a href="/" class="list-group-item active">用户管理</a>
+			<a href="./online" class="list-group-item">查看在线用户</a>
             <a href="./logs" class="list-group-item">查看日志</a>
           </div>
         </div><!--/span-->
@@ -98,8 +99,9 @@ function addtime() {
             <button type="submit" class="btn btn-default">添加用户</button>
           </form>
           </div>
-          
-          
+		  <br/>
+		  	<a href="/updateall" onclick="javascript:return p_update()"><button type="submit" class="btn btn-success">全部续期</button></a>
+		  <hr/>          
           <div class="">
 				      <table class="table table-striped">
 					        <thead>
@@ -108,18 +110,31 @@ function addtime() {
 					            <th>用户名</th>
 					            <th>密码</th>
                       <th>过期时间</th>
+                      <th>是否启用</th>
 					            <th>管理</th>
 					          </tr>
 					        </thead>
 					        {{ range .User}}
 					        <tbody>
-					          <tr>
+                    {{ if eq .Active 0 }}
+					          <tr class="danger">
 					            <td>{{ .Id }}</td>
 					            <td>{{ .Name }}</td>
 					            <td>{{ .Password }}</td>
                       <td>{{ .Expired_time }}</td>
+                      <td>{{ .Active }}</td>
 					            <td><a href="/user/modify?uid={{.Id}}" onclick="">修改</a> <a href="/addtime/{{.Id }}">续期</a> <a href="/del/{{ .Id }}" onclick="javascript:return p_del()">删除</a></td>
 					          </tr>
+                    {{ else }}
+                      <tr class="info">
+                      <td>{{ .Id }}</td>
+                      <td>{{ .Name }}</td>
+                      <td>{{ .Password }}</td>
+                      <td>{{ .Expired_time }}</td>
+                      <td>{{ .Active }}</td>
+                      <td><a href="/user/modify?uid={{.Id}}" onclick="">修改</a> <a href="/addtime/{{.Id }}">续期</a> <a href="/del/{{ .Id }}" onclick="javascript:return p_del()">删除</a></td>
+                    </tr>
+                    {{ end }}
 					       </tbody>
                  {{ end }}
 					  </table>

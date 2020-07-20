@@ -13,10 +13,10 @@ type AddtimeController struct {
 func (this *AddtimeController) Get() {
 	//添加用户验证，暂没实现
 	//检测登录
-	if !checkAccount(this.Ctx) {
-		this.Redirect("/login", 302)
-		return
-	}
+	//if !checkAccount(this.Ctx) {
+	//	this.Redirect("/login", 302)
+	//	return
+	//}
 	uid := this.Ctx.Input.Param(":id")
 	beego.Debug(uid)
 	err := models.AddTime(uid)
